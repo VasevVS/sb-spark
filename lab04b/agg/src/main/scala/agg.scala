@@ -10,7 +10,7 @@ object agg {
 
     val kafkaReadParams = Map(
       "kafka.bootstrap.servers" -> "spark-master-1:6667",
-      "subscribe" -> "yuriy_osychenko"
+      "subscribe" -> "vladimir_vasev"
     )
 
     val rawKafkaStream = spark.readStream.format("kafka").options(kafkaReadParams).load
@@ -50,9 +50,9 @@ object agg {
       .toJSON
 
     val kafkaParamsWrite = Map(
-      "kafka.bootstrap.servers" -> "spark-master-1:6667",
-      "topic" -> "yuriy_osychenko_lab04b_out",
-      "checkpointLocation" -> "/user/yuriy.osychenko/checkpoints"
+      "kafka.bootstrap.servers" -> "10.0.0.5:6667",
+      "topic" -> "vladimir_vasev_lab04b_out",
+      "checkpointLocation" -> "/user/vladimir.vasev/checkpoints"
     )
 
     JSONFormattedGroupedStreamDataset.writeStream
