@@ -1,67 +1,54 @@
-import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types._
+// !!!!!
+//spark-shell --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.5
+
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.streaming.Trigger
+import org.apache.spark.sql.catalyst.ScalaReflection
+import org.apache.spark.sql.types.StructType
+import org.apache.spark.sql.functions.{from_json, window, sum, count, min, max, when, to_json,struct}
+import org.apache.spark.sql.streaming.{OutputMode, Trigger}
 
-object agg {
-  def main(args: Array[String]): Unit = {
-    val spark = SparkSession.builder.appName("agg").getOrCreate()
-    import spark.implicits._
+object agg extends App {
 
-    val kafkaReadParams = Map(
-      "kafka.bootstrap.servers" -> "spark-master-1:6667",
-      "subscribe" -> "vladimir_vasev"
-    )
+  case class InputJson(event_type: String, category: String,
+                       item_id: String, item_price: Long,
+                       uid: String, timestamp: Long)
 
-    val rawKafkaStream = spark.readStream.format("kafka").options(kafkaReadParams).load
+  implicit val spark: SparkSession = SparkSession.builder.
+    appName("vladimir.vasev.lab04b.agg").getOrCreate()
 
-    val jsonDataFromKafka = rawKafkaStream.select('value.cast("string")).as[String]
 
-    val datasetRowSchema = StructType(
-      List(
-        StructField("event_type", StringType),
-        StructField("category", StringType),
-        StructField("item_id", StringType),
-        StructField("item_price", IntegerType),
-        StructField("uid", StringType),
-        StructField("timestamp", LongType)
-      )
-    )
+  import spark.implicits._
 
-    val streamDataset = jsonDataFromKafka
-      .select(from_json('value, datasetRowSchema) as "data")
-      .select("data.*")
-      .withColumn("date_time_ts", from_unixtime('timestamp / lit(1000), "yyyy-MM-dd HH:mm:ss"))
+  val bootstrapServer = "spark-master-1:6667"
+  //val bootstrapServer1 = "10.0.0.31:6667"
+  val topicNameIn = "vladimir_vasev"
+  val topicNameOut = "vladimir_vasev_lab04b_out"
 
-    val groupedStreamDataset = streamDataset
-      .groupBy(window('date_time_ts, "1 hours"))
-      .agg(
-        sum(when('event_type === "buy", 'item_price).otherwise(0)).as("revenue"),
-        sum(when('uid.isNotNull, 1).otherwise(0)).as("visitors"),
-        sum(when('event_type === "buy", 1).otherwise(0)).as("purchases")
-      )
-      .withColumn("aov", 'revenue / 'purchases)
+  val schema = ScalaReflection.schemaFor[InputJson].dataType.asInstanceOf[StructType]
 
-    val JSONFormattedGroupedStreamDataset = groupedStreamDataset
-      .select("*", "window.start", "window.end")
-      .withColumn("start_ts", unix_timestamp('start))
-      .withColumn("end_ts", unix_timestamp('end))
-      .drop("window", "start", "end")
-      .toJSON
+  val dfStream = spark.readStream.
+    format("kafka").
+    option("kafka.bootstrap.servers", bootstrapServer).
+    option("subscribe", topicNameIn).
+    load()
 
-    val kafkaParamsWrite = Map(
-      "kafka.bootstrap.servers" -> "10.0.0.5:6667",
-      "topic" -> "vladimir_vasev_lab04b_out",
-      "checkpointLocation" -> "/user/vladimir.vasev/checkpoints"
-    )
+  val dfAgg = dfStream.select(from_json($"value" cast "string", schema) as "record").
+    select($"record.*").groupBy(window(($"timestamp" / 1000).
+    cast("timestamp"), "1 hour")).agg(
+    min("window.start").cast("long") as "start_ts",
+    max("window.end").cast("long") as "end_ts",
+    sum(when($"event_type" === "buy", $"item_price")) as "revenue",
+    count(when($"uid" isNotNull, $"event_type")) as "visitors",
+    count(when($"event_type" === "buy", $"event_type")) as "purchases").
+    withColumn("aov", $"revenue" / $"purchases").drop("window")
 
-    JSONFormattedGroupedStreamDataset.writeStream
-      .format("kafka")
-      .outputMode("update")
-      .trigger(Trigger.ProcessingTime("5 seconds"))
-      .options(kafkaParamsWrite)
-      .start
-
-    spark.stop
-  }
+  dfAgg.select(to_json(struct("*")) as "value").writeStream.
+    format("kafka").
+    //option("kafka.bootstrap.servers", bootstrapServer1).
+    option("kafka.bootstrap.servers", bootstrapServer).
+    option("topic", topicNameOut).
+    option("checkpointLocation", "checkpointdir").
+    outputMode(OutputMode.Update()).
+    trigger(Trigger.ProcessingTime(5000)).
+    start().awaitTermination()
 }

@@ -20,4 +20,4 @@ scalacOptions ++= Seq(
   "-Ywarn-numeric-widen"
 )
 
-assemblyJarName in assembly := s"${name.value}-${version.value}.jar"
+assemblyJarName in assembly := s"${name.value}_2.11-${version.value}.jar"
