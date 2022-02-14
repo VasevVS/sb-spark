@@ -1,11 +1,15 @@
 [0m[[0minfo[0m] [0mPackaging /Users/a16717644/Documents/Learning/sb-spark/lab05/users_items/target/scala-2.11/users_items_2.11-1.0.jar ...[0m
 [0m[[0mdebug[0m] [0mInput file mappings:[0m
-[0m[[0mdebug[0m] [0m	users_items$.class[0m
-[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab05/users_items/target/scala-2.11/classes/users_items$.class[0m
-[0m[[0mdebug[0m] [0m	users_items$$anonfun$expr$1$1.class[0m
-[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab05/users_items/target/scala-2.11/classes/users_items$$anonfun$expr$1$1.class[0m
-[0m[[0mdebug[0m] [0m	users_items$delayedInit$body.class[0m
-[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab05/users_items/target/scala-2.11/classes/users_items$delayedInit$body.class[0m
 [0m[[0mdebug[0m] [0m	users_items.class[0m
 [0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab05/users_items/target/scala-2.11/classes/users_items.class[0m
+[0m[[0mdebug[0m] [0m	users_items$.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab05/users_items/target/scala-2.11/classes/users_items$.class[0m
+[0m[[0mdebug[0m] [0m	users_items$$anonfun$3.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab05/users_items/target/scala-2.11/classes/users_items$$anonfun$3.class[0m
+[0m[[0mdebug[0m] [0m	users_items$$anonfun$2.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab05/users_items/target/scala-2.11/classes/users_items$$anonfun$2.class[0m
+[0m[[0mdebug[0m] [0m	users_items$delayedInit$body.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab05/users_items/target/scala-2.11/classes/users_items$delayedInit$body.class[0m
+[0m[[0mdebug[0m] [0m	users_items$$anonfun$1.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab05/users_items/target/scala-2.11/classes/users_items$$anonfun$1.class[0m
 [0m[[0minfo[0m] [0mDone packaging.[0m
