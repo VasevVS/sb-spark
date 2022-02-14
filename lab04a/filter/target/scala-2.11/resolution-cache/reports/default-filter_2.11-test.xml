@@ -7,7 +7,7 @@
 		revision="1.0"
 		conf="test"
 		confs="compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom, scala-tool"
-		date="20220212133718"/>
+		date="20220214120928"/>
 	<dependencies>
 		<module organisation="org.apache.spark" name="spark-sql_2.11">
 			<revision name="2.4.5" status="release" pubdate="20200203004154" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://spark.apache.org/" downloaded="false" searched="false" default="false" conf="default, compile, runtime, default(compile), master" position="130">
@@ -1332,12 +1332,12 @@
 			</revision>
 		</module>
 		<module organisation="commons-logging" name="commons-logging">
-			<revision name="1.2" status="release" pubdate="20140705221228" resolver="public" artresolver="public" homepage="http://commons.apache.org/proper/commons-logging/" downloaded="true" searched="true" default="false" conf="default, compile, runtime, default(compile), master" position="158">
+			<revision name="1.2" status="release" pubdate="20140705221228" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://commons.apache.org/proper/commons-logging/" downloaded="false" searched="false" default="false" conf="default, compile, runtime, default(compile), master" position="158">
 				<license name="The Apache Software License, Version 2.0" url="http://www.apache.org/licenses/LICENSE-2.0.txt"/>
-				<metadata-artifact status="successful" details="" size="19206" time="123" location="/Users/a16717644/.ivy2/cache/commons-logging/commons-logging/ivy-1.2.xml" searched="true" original-local-location="/Users/a16717644/.ivy2/cache/commons-logging/commons-logging/ivy-1.2.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/commons-logging/commons-logging/1.2/commons-logging-1.2.pom"/>
+				<metadata-artifact status="no" details="" size="11623" time="0" location="/Users/a16717644/.ivy2/cache/commons-logging/commons-logging/ivy-1.2.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/commons-logging/commons-logging/1.2/commons-logging-1.2.pom"/>
 				<caller organisation="default" name="filter_2.11" conf="test, compile, runtime" rev="1.2" rev-constraint-default="1.2" rev-constraint-dynamic="1.2" callerrev="1.0"/>
 				<artifacts>
-					<artifact name="commons-logging" type="jar" ext="jar" status="successful" details="" size="61829" time="145" location="/Users/a16717644/.ivy2/cache/commons-logging/commons-logging/jars/commons-logging-1.2.jar">
+					<artifact name="commons-logging" type="jar" ext="jar" status="no" details="" size="61829" time="0" location="/Users/a16717644/.ivy2/cache/commons-logging/commons-logging/jars/commons-logging-1.2.jar">
 						<origin-location is-local="false" location="https://repo1.maven.org/maven2/commons-logging/commons-logging/1.2/commons-logging-1.2.jar"/>
 					</artifact>
 				</artifacts>
@@ -1850,7 +1850,7 @@
 		</module>
 		<module organisation="org.apache.curator" name="curator-recipes">
 			<revision name="2.6.0" status="release" pubdate="20140708070148" resolver="sbt-chain" artresolver="sbt-chain" homepage="" downloaded="false" searched="false" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="49">
-				<license name="The Apache Software License, Version 2.0" url="file:///Users/a16717644/Documents/Learning/SparkDE/solutions/vladimir.vasev/lab04a/filter/LICENSE"/>
+				<license name="The Apache Software License, Version 2.0" url="file:///Users/a16717644/Documents/Learning/sb-spark/lab04a/filter/LICENSE"/>
 				<metadata-artifact status="no" details="" size="13579" time="0" location="/Users/a16717644/.ivy2/cache/org.apache.curator/curator-recipes/ivy-2.6.0.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/apache/curator/curator-recipes/2.6.0/curator-recipes-2.6.0.pom"/>
 				<caller organisation="org.apache.spark" name="spark-core_2.11" conf="default, compile, runtime, master" rev="2.6.0" rev-constraint-default="2.6.0" rev-constraint-dynamic="2.6.0" callerrev="2.4.5"/>
 				<caller organisation="org.apache.hadoop" name="hadoop-common" conf="compile, runtime" rev="2.6.0" rev-constraint-default="2.6.0" rev-constraint-dynamic="2.6.0" callerrev="2.6.5"/>
@@ -1875,7 +1875,7 @@
 		</module>
 		<module organisation="org.apache.curator" name="curator-framework">
 			<revision name="2.6.0" status="release" pubdate="20140708070112" resolver="sbt-chain" artresolver="sbt-chain" homepage="" downloaded="false" searched="false" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="42">
-				<license name="The Apache Software License, Version 2.0" url="file:///Users/a16717644/Documents/Learning/SparkDE/solutions/vladimir.vasev/lab04a/filter/LICENSE"/>
+				<license name="The Apache Software License, Version 2.0" url="file:///Users/a16717644/Documents/Learning/sb-spark/lab04a/filter/LICENSE"/>
 				<metadata-artifact status="no" details="" size="13427" time="0" location="/Users/a16717644/.ivy2/cache/org.apache.curator/curator-framework/ivy-2.6.0.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/apache/curator/curator-framework/2.6.0/curator-framework-2.6.0.pom"/>
 				<caller organisation="org.apache.curator" name="curator-recipes" conf="compile, runtime" rev="2.6.0" rev-constraint-default="2.6.0" rev-constraint-dynamic="2.6.0" callerrev="2.6.0"/>
 				<caller organisation="org.apache.hadoop" name="hadoop-auth" conf="compile, runtime" rev="2.6.0" rev-constraint-default="2.6.0" rev-constraint-dynamic="2.6.0" callerrev="2.6.5"/>
@@ -1888,7 +1888,7 @@
 		</module>
 		<module organisation="org.apache.curator" name="curator-client">
 			<revision name="2.6.0" status="release" pubdate="20140708070047" resolver="sbt-chain" artresolver="sbt-chain" homepage="" downloaded="false" searched="false" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="43">
-				<license name="The Apache Software License, Version 2.0" url="file:///Users/a16717644/Documents/Learning/SparkDE/solutions/vladimir.vasev/lab04a/filter/LICENSE"/>
+				<license name="The Apache Software License, Version 2.0" url="file:///Users/a16717644/Documents/Learning/sb-spark/lab04a/filter/LICENSE"/>
 				<metadata-artifact status="no" details="" size="13474" time="0" location="/Users/a16717644/.ivy2/cache/org.apache.curator/curator-client/ivy-2.6.0.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/apache/curator/curator-client/2.6.0/curator-client-2.6.0.pom"/>
 				<caller organisation="org.apache.hadoop" name="hadoop-common" conf="compile, runtime" rev="2.6.0" rev-constraint-default="2.6.0" rev-constraint-dynamic="2.6.0" callerrev="2.6.5"/>
 				<caller organisation="org.apache.curator" name="curator-framework" conf="compile, runtime" rev="2.6.0" rev-constraint-default="2.6.0" rev-constraint-dynamic="2.6.0" callerrev="2.6.0"/>

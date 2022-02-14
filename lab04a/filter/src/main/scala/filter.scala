@@ -15,6 +15,7 @@ object filter {
     // spark start!!!
     val spark: SparkSession = SparkSession.builder
       .appName("vasevVS_lab04a")
+      .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.5, org.apache.kafka:kafka-clients:0.10.1.0")
       //   .master("local")
       .getOrCreate()
 
