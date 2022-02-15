@@ -1,0 +1,11 @@
+[0m[[0minfo[0m] [0mPackaging /Users/a16717644/Documents/Learning/sb-spark/lab06/features/target/scala-2.11/features_2.11-1.0.jar ...[0m
+[0m[[0mdebug[0m] [0mInput file mappings:[0m
+[0m[[0mdebug[0m] [0m	features$delayedInit$body.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab06/features/target/scala-2.11/classes/features$delayedInit$body.class[0m
+[0m[[0mdebug[0m] [0m	features$$anonfun$1.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab06/features/target/scala-2.11/classes/features$$anonfun$1.class[0m
+[0m[[0mdebug[0m] [0m	features.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab06/features/target/scala-2.11/classes/features.class[0m
+[0m[[0mdebug[0m] [0m	features$.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab06/features/target/scala-2.11/classes/features$.class[0m
+[0m[[0minfo[0m] [0mDone packaging.[0m
