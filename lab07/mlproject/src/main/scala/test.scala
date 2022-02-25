@@ -52,7 +52,7 @@ object test extends App {
       res.write
         .format("kafka")
         .option("kafka.bootstrap.servers", "10.0.0.5:6667")
-        .option("topic", "vladimir_vasev_lab04b_out")
+        .option("topic", "vladimir_vasev_lab07_out")
         .save
     }
   //Поехали!!!
