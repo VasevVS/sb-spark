@@ -12,7 +12,7 @@ libraryDependencies ++= Seq(
   "org.apache.spark"      %% "spark-mllib"                 % "2.4.6" % Provided
 )
 
-assemblyJarName in assembly := s"${name.value}-${version.value}.jar"
+assemblyJarName in assembly := s"${name.value}_2.11-${version.value}.jar"
 test in assembly := {}
 
 assemblyMergeStrategy in assembly := {
