@@ -4,6 +4,7 @@
 [0m[[0mdebug[0m] [0mMerging files...[0m
 [0m[[0mdebug[0m] [0mMerging 'META-INF/MANIFEST.MF' with strategy 'discard'[0m
 [0m[[0minfo[0m] [0mStrategy 'discard' was applied to a file (Run the task at debug level to see details)[0m
+[0m[[0mdebug[0m] [0mSHA-1: b0e9fbc6e7cc86ff353b8a984a758aa46f62e905[0m
 [0m[[0minfo[0m] [0mPackaging /Users/a16717644/Documents/Learning/sb-spark/lab07/mlproject/target/scala-2.11/mlproject_2.11-1.0.jar ...[0m
 [0m[[0mdebug[0m] [0mInput file mappings:[0m
 [0m[[0mdebug[0m] [0m	library.properties[0m

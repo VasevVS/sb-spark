@@ -25,7 +25,7 @@ object test extends App {
   //читаем топик из Кафки
     spark.readStream
       .format("kafka")
-      .option("kafka.bootstrap.servers", "10.0.0.5:6667")
+      .option("kafka.bootstrap.servers", "10.0.0.31:6667")
       .option("subscribe", "vladimir_vasev")
       .load
       //преобразуем данные для применения в модели
@@ -51,7 +51,7 @@ object test extends App {
         .select(to_json(struct(col("uid"), col("label_string").alias("gender_age"))).alias("value"))
       res.write
         .format("kafka")
-        .option("kafka.bootstrap.servers", "10.0.0.5:6667")
+        .option("kafka.bootstrap.servers", "10.0.0.31:6667")
         .option("topic", "vladimir_vasev_lab07_out")
         .save
     }
