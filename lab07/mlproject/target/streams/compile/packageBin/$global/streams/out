@@ -1,0 +1,17 @@
+[0m[[0minfo[0m] [0mPackaging /Users/a16717644/Documents/Learning/sb-spark/lab07/mlproject/target/scala-2.11/mlproject_2.11-1.0.jar ...[0m
+[0m[[0mdebug[0m] [0mInput file mappings:[0m
+[0m[[0mdebug[0m] [0m	train.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab07/mlproject/target/scala-2.11/classes/train.class[0m
+[0m[[0mdebug[0m] [0m	test$.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab07/mlproject/target/scala-2.11/classes/test$.class[0m
+[0m[[0mdebug[0m] [0m	train$delayedInit$body.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab07/mlproject/target/scala-2.11/classes/train$delayedInit$body.class[0m
+[0m[[0mdebug[0m] [0m	test$$anonfun$1.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab07/mlproject/target/scala-2.11/classes/test$$anonfun$1.class[0m
+[0m[[0mdebug[0m] [0m	test$delayedInit$body.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab07/mlproject/target/scala-2.11/classes/test$delayedInit$body.class[0m
+[0m[[0mdebug[0m] [0m	train$.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab07/mlproject/target/scala-2.11/classes/train$.class[0m
+[0m[[0mdebug[0m] [0m	test.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/a16717644/Documents/Learning/sb-spark/lab07/mlproject/target/scala-2.11/classes/test.class[0m
+[0m[[0minfo[0m] [0mDone packaging.[0m

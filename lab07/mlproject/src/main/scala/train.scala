@@ -1,66 +1,64 @@
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
 import org.apache.spark.ml.classification.LogisticRegression
 import org.apache.spark.ml.feature.{CountVectorizer, StringIndexer, IndexToString}
 import org.apache.spark.ml.{Pipeline, PipelineModel}
-import org.apache.spark.sql.types.{StringType, StructType, _}
 
+object train {
+  def main(args: Array[String]): Unit = {
 
-object train extends App {
-  val spark = SparkSession.builder().getOrCreate()
+    val spark = SparkSession
+      .builder
+      .appName("lab07_train")
+      .getOrCreate
 
-  import spark.implicits._
+    val trainPath = spark.conf.get("spark.mlproject.train_path") // "/labs/laba07/laba07.json"
+    val modelPath = spark.conf.get("spark.mlproject.model_path") // "/user/vladimir.vasev/laba07/model/"
+    val maxIter = spark.conf.get("spark.mlproject.max_iter") // 10
+    val regParam = spark.conf.get("spark.mlproject.reg_param") // 0.001
 
-  val trainInputPath = spark.conf.get("spark.train.trainInputPath")
-  val modelPath = spark.conf.get("spark.train.modelPath")
+    // ------------------------------ Чтение и парсинг логов
 
-  val schema = StructType(List(
-    StructField("uid", StringType, nullable = true),
-    StructField("visits", ArrayType(StructType(List(
-      StructField("timestamp", StringType, nullable = true),
-      StructField("url", StringType, nullable = true)))),
-      nullable = true)))
+    val exprGetDomain = "regexp_replace(parse_url(visits.url, 'HOST'), '^www.', '')"
 
-  val weblogs = spark.read
-    .format("json")
-    .schema(schema)
-    .option("inferSchema", "false")
-    .load(trainInputPath)
-    .filter('uid.isNotNull)
-    .select('uid, 'gender_age, explode('visits).alias("visits"))
-    .select('uid, col("visits.url").alias("domains"), 'gender_age)
-    .withColumn("domains", lower(callUDF("parse_url", 'domains, lit("HOST"))))
-    .withColumn("domains", regexp_replace('domains, "www.", ""))
-    .groupBy('uid, 'gender_age)
-    .agg(collect_list('domains).alias("domains"))
+    val logs = spark
+      .read
+      .json(trainPath)
+      .select(col("uid"), col("gender_age"), explode(col("visits")).alias("visits"))
+      .withColumn("domain", expr(exprGetDomain))
+      .groupBy(col("uid"), col("gender_age"))
+      .agg(collect_list("domain").alias("domains"))
 
-  val cv = new CountVectorizer()
-    .setInputCol("domains")
-    .setOutputCol("features")
+    // ------------------------------ Подготовка параметров для обучения модели
 
-  val indexer = new StringIndexer()
-    .setInputCol("gender_age")
-    .setOutputCol("label")
-    .fit(weblogs)
+    val cv = new CountVectorizer()
+      .setInputCol("domains")
+      .setOutputCol("features")
 
-  val lr = new LogisticRegression()
-    .setMaxIter(10)
-    .setRegParam(0.001)
+    val indexer = new StringIndexer()
+      .setInputCol("gender_age")
+      .setOutputCol("label")
+      .fit(logs)
 
-  val is = new IndexToString()
-    .setInputCol("prediction")
-    .setLabels(indexer.labels)
-    .setOutputCol("label_string")
+    val lr = new LogisticRegression()
+      .setMaxIter(maxIter.toInt)
+      .setRegParam(regParam.toDouble)
 
-  val pipeline = new Pipeline()
-    .setStages(Array(cv, indexer, lr, is))
+    val converter = new IndexToString()
+      .setInputCol("prediction")
+      .setOutputCol("label_string")
+      .setLabels(indexer.labels)
 
-  pipeline
-    .fit(weblogs)
-    .write
-    .overwrite()
-    .save(modelPath)
+    val pipeline = new Pipeline()
+      .setStages(Array(cv, indexer, lr, converter))
 
-  spark.stop()
+    // ------------------------------ Обучение и сохранение модели
 
+    val model = pipeline.fit(logs)
+    model.write.overwrite.save(modelPath)
+
+    // ------------------------------ Освобождение ресурсов
+
+    spark.stop
+  }
 }

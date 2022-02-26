@@ -1,61 +1,75 @@
-import org.apache.spark.ml.classification.LogisticRegression
-import org.apache.spark.ml.feature.{CountVectorizer, IndexToString, StringIndexer}
-import org.apache.spark.ml.{Pipeline, PipelineModel}
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
+import org.apache.spark.sql.types._
+import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.streaming.Trigger
-import org.apache.spark.sql.types.{StringType, StructType, _}
+import org.apache.spark.ml.{Pipeline, PipelineModel}
 
-object test extends App {
+object test {
+  def main(args: Array[String]): Unit = {
 
-  val spark = SparkSession.builder().getOrCreate()
-  import spark.implicits._
+    val spark = SparkSession
+      .builder
+      .appName("lab07_test")
+      .getOrCreate
 
-  val modelPath = spark.conf.get("spark.test.modelPath")
+    val modelPath = spark.conf.get("spark.mlproject.model_path") // "/user/vladimir.vasev/laba07/model/"
+    val kafkaInputTopic = spark.conf.get("spark.mlproject.kafka_input_topic") // "vladimir_vasev"
+    val kafkaOutputTopic = spark.conf.get("spark.mlproject.kafka_output_topic")  // "vladimir_vasev_lab04b_out"
+    val kafkaServer = "spark-master-1:6667"
 
-  //определяем схему для чтения данных из Кафки
-  val schema = StructType(List(
-    StructField("uid", StringType, nullable = true),
-    StructField("visits", ArrayType(StructType(List(
-      StructField("timestamp", StringType, nullable = true),
-      StructField("url", StringType, nullable = true)))),
-      nullable = true)))
+    // ------------------------------ Чтение модели
 
-  val test =
-  //читаем топик из Кафки
-    spark.readStream
+    val model = PipelineModel.load(modelPath)
+
+    // ------------------------------ Чтение данных
+
+    val schema = StructType(Seq(
+      StructField("uid", StringType, nullable = true),
+      StructField("visits", ArrayType(StructType(Seq(
+        StructField("url", StringType, nullable = true),
+        StructField("timestamp", StringType, nullable = true))))
+        , nullable = true)
+    ))
+
+    val exprGetDomain = "regexp_replace(parse_url(visits.url, 'HOST'), '^www.', '')"
+
+    val logs = spark
+      .readStream
       .format("kafka")
-      .option("kafka.bootstrap.servers", "spark-master-1:6667")
-      .option("subscribe", "vladimir_vasev")
+      .option("kafka.bootstrap.servers", kafkaServer)
+      .option("subscribe", kafkaInputTopic)
       .load
-      //преобразуем данные для применения в модели
-      .select(from_json('value.cast(StringType), schema).alias("value"))
-      .select(col("value.uid").alias("uid"), col("value.visits").alias("visits"))
-      .select('uid, explode(col("visits.url")).alias("domains"))
-      .withColumn("domains", lower(callUDF("parse_url", 'domains, lit("HOST"))))
-      .withColumn("domains", regexp_replace('domains, "www.", ""))
-      .groupBy('uid)
-      .agg(collect_list('domains).alias("domains"))
 
-  //вычитываем модель
-  val myModel = PipelineModel.load(modelPath)
+    // ------------------------------ Преобразование данных, применение модели и запись - для каждого батча
 
-  //определяем синк для записи в Кафку с необходимыми проебразованиями батча
-  val sink = test
-    .writeStream
-    .trigger(Trigger.ProcessingTime("30 seconds"))
-    .outputMode("update")
-    .foreachBatch { (batchDF: DataFrame, batchId: Long) =>
-      val res = myModel
-        .transform(batchDF)
-        .select(to_json(struct(col("uid"), col("label_string").alias("gender_age"))).alias("value"))
-      res.write
-        .format("kafka")
-        .option("kafka.bootstrap.servers", "spark-master-1:6667")
-        .option("topic", "vladimir_vasev_lab07_out")
-        .save
-    }
-  //Поехали!!!
-  sink.start()
-  spark.stop()
+    val kafkaSink = logs
+      .writeStream
+      .trigger(Trigger.ProcessingTime("5 seconds"))
+      .foreachBatch { (batchDF: DataFrame, batchId: Long) =>
+        // Подготовка данных
+        val preparedLogs = batchDF
+          .select(col("timestamp"), from_json(col("value").cast("string"), schema).alias("valueParsed"))
+          .select(col("valueParsed.*"))
+          .select(col("uid"), explode(col("visits")).alias("visits"))
+          .withColumn("domain", expr(exprGetDomain))
+          .groupBy(col("uid"))
+          .agg(collect_list("domain").alias("domains"))
+        // Применение модели
+        val result = model.transform(preparedLogs)
+        // Запись
+        result
+          .select(lit(null).cast(StringType), to_json(struct(
+            col("uid"),
+            col("label_string").alias("gender_age")
+          )).alias("value"))
+          .write
+          .format("kafka")
+          .option("kafka.bootstrap.servers", kafkaServer)
+          .option("topic", kafkaOutputTopic)
+          .save
+      }
+
+    kafkaSink.start
+  }
 }

@@ -4,7 +4,7 @@
 		module="mlproject-build"
 		revision="0.1-SNAPSHOT"
 		status="integration"
-		publication="20220225141015"
+		publication="20220226091420"
 		e:sbtVersion="0.13" e:scalaVersion="2.10"
 	>
 		<description>
